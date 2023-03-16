@@ -14,17 +14,27 @@ import { MainContainer as Container } from "@/components/MainContainer";
 export default function Home() {
     return (
         <div className="flex flex-col justify-center items-center">
-            <main className="flex flex-col justify-center items-center min-h-screen">
-                <Image
-                    src={Logo}
-                    alt='Logo do Quero Açaí composta por três copos com açaí com recheios'
-                    priority
-                />
-                <Button>
-                    <Link href='/app'>
-                        Pedir Agora
-                    </Link>
-                </Button>
+            <main className="lg:grid lg:px-[10%] justify-items-center grid-cols-2 flex flex-col justify-center items-center min-h-screen">
+                <div className="flex flex-col justify-center items-center gap-11">
+                    <Image
+                        src={Logo}
+                        alt='Logo do Quero Açaí composta por três copos com açaí com recheios'
+                        priority
+                    />
+                    <Button>
+                        <Link href='/app'>
+                            Pedir Agora
+                        </Link>
+                    </Button>
+                </div>
+                <div className="opacity-0 lg:opacity-100">
+                    <h2>
+                        Peça rapidamente o seu açaí com qualidade, diversas combinações e entrega rápida!
+                    </h2>
+                    <p className="mt-4 font-extralight">
+                        Explore <strong>5</strong> complementos diferentes, <strong>4</strong> opções de frutas, caldas e cremes para adicionar ao seu açaí.
+                    </p>
+                </div>
                 <footer className="flex flex-col justify-center items-center absolute bottom-9">
                     <CaretDoubleDown />
                     <span className="text-white italic font-light mt-1">Explorar Opções</span>
