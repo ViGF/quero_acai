@@ -22,7 +22,7 @@ export default function Home() {
                         priority
                     />
                     <Button>
-                        <Link href='/app'>
+                        <Link href='/auth/login'>
                             Pedir Agora
                         </Link>
                     </Button>
@@ -83,7 +83,7 @@ export default function Home() {
                         Funcionamos de Domingo a Sexta das 12:00 às 21:00 horas
                     </p>
                     <Button>
-                        <Link href='/app'>
+                        <Link href='/auth/login'>
                             Pedir Agora
                         </Link>
                     </Button>
