@@ -1,8 +1,9 @@
 import { FieldErrors } from "react-hook-form"
 import { FormData } from "@/app/auth/signup/page"
+import { ErrorForm } from "@/components/ErrorForm"
 
 type FormErrorIndexes = {
-    [index: string ]: any
+    [index: string]: any
 }
 
 export function renderErrors(errors: FieldErrors<FormData>) {
@@ -10,9 +11,7 @@ export function renderErrors(errors: FieldErrors<FormData>) {
         const errorsTypedWithIndexes: FormErrorIndexes = errors
 
         return (
-            <span className="font-extralight border p-3 rounded-xl">
-                {errorsTypedWithIndexes[error].message}
-            </span>
+            <ErrorForm message={errorsTypedWithIndexes[error].message} />
         )
     }
 }

@@ -3,7 +3,7 @@ import { Poppins } from '@next/font/google'
 import './globals.css'
 
 const poppins = Poppins({
-    weight: ['200','300', '400', '500', '700'],
+    weight: ['200', '300', '400', '500', '700'],
     style: ['italic', 'normal']
 })
 
@@ -19,7 +19,9 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
             <head />
-            <body className={`${poppins.className}`}>{children}</body>
+            <body className={`${poppins.className}`}>
+                {children}
+            </body>
         </html>
     )
 }

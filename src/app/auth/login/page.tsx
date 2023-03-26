@@ -1,9 +1,13 @@
 'use client'
 
-import { Button } from "@/components/Button";
-import { renderErrors } from "@/utils/function/renderErrors";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useForm } from 'react-hook-form';
+import { Button } from "@/components/Button";
+import { renderErrors } from "@/utils/functions/renderErrors";
+import { useState } from "react";
+import { ErrorForm } from "@/components/ErrorForm";
+import { useRouter } from "next/navigation";
 
 type FormData = {
     email: string
@@ -11,10 +15,19 @@ type FormData = {
 }
 
 export default function LogIn() {
+    const [errorAuth, setErrorAuth] = useState<string | undefined>()
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>()
+    const router = useRouter()
 
-    function logIn(data: FormData) {
-        console.log(data)
+    async function logIn(data: FormData) {
+        const authFlow = await signIn('credentials', {
+            callbackUrl: '/store',
+            redirect: false,
+            email: data.email,
+            password: data.password
+        })
+        setErrorAuth(authFlow?.error)
+        authFlow?.url ? router.push(authFlow?.url) : null
     }
 
     return (
@@ -24,18 +37,21 @@ export default function LogIn() {
                 é rápido!
             </h1>
             {errors && renderErrors(errors)}
+            {errorAuth && (
+                <ErrorForm message={errorAuth} />
+            )}
             <form
                 onSubmit={handleSubmit(logIn)}
                 className='flex flex-col font-extralight w-64 caret-primary'
             >
                 <label>Email</label>
                 <input
-                    type="text"
+                    type="email"
                     placeholder="ex.: junior@email.com"
                     {
-                        ...register('email',
-                            { required: "Um email é obrigatório!" }
-                        )
+                    ...register('email',
+                        { required: "Um email é obrigatório!" }
+                    )
                     }
                     className='rounded text-primary placeholder:text-primary'
                 />
@@ -44,9 +60,9 @@ export default function LogIn() {
                     type="password"
                     placeholder="********"
                     {
-                        ...register('password',
-                            { required: "Uma senha é obrigatória!" }
-                        )
+                    ...register('password',
+                        { required: "Uma senha é obrigatória!" }
+                    )
                     }
                     className='rounded text-primary placeholder:text-primary'
                 />

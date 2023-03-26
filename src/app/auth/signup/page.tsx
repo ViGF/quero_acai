@@ -1,9 +1,13 @@
 'use client'
 
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/Button";
-import { renderErrors } from "@/utils/function/renderErrors";
+import { renderErrors } from "@/utils/functions/renderErrors";
 import Link from "next/link";
 import { useForm } from 'react-hook-form';
+import { useState } from "react";
+import { ErrorForm } from "@/components/ErrorForm";
+import { useRouter } from "next/navigation";
 
 export type FormData = {
     name: string
@@ -13,10 +17,20 @@ export type FormData = {
 }
 
 export default function SignUp() {
+    const [errorAuth, setErrorAuth] = useState<string | undefined>()
     const { register, handleSubmit, getValues, formState: { errors } } = useForm<FormData>()
+    const router = useRouter()
 
-    function signUp(data: FormData) {
-        console.log(data)
+    async function signUp(data: FormData) {
+        const authFlow = await signIn('credentials', {
+            callbackUrl: '/store',
+            redirect: false,
+            name: data.name,
+            email: data.email,
+            password: data.password
+        })
+        setErrorAuth(authFlow?.error)
+        authFlow?.url ? router.push(authFlow?.url) : null
     }
 
     return (
@@ -25,6 +39,9 @@ export default function SignUp() {
                 Crie a sua conta, é prático!
             </h1>
             {errors && renderErrors(errors)}
+            {errorAuth && (
+                <ErrorForm message={errorAuth} />
+            )}
             <form
                 onSubmit={handleSubmit(signUp)}
                 className='flex flex-col font-extralight w-64 caret-primary'
@@ -34,20 +51,20 @@ export default function SignUp() {
                     type="text"
                     placeholder="ex.: Junior Vieira"
                     {
-                        ...register('name',
-                            { required: "Um nome é obrigatório!" }
-                        )
+                    ...register('name',
+                        { required: "Um nome é obrigatório!" }
+                    )
                     }
                     className='rounded text-primary placeholder:text-primary'
                 />
                 <label className="mt-3">Email</label>
                 <input
-                    type="text"
+                    type="email"
                     placeholder="ex.: junior@email.com"
                     {
-                        ...register('email',
-                            { required: "Um email é obrigatório!" }
-                        )
+                    ...register('email',
+                        { required: "Um email é obrigatório!" }
+                    )
                     }
                     className='rounded text-primary placeholder:text-primary'
                 />
@@ -67,13 +84,13 @@ export default function SignUp() {
                     placeholder="********"
                     {...register("passwordConfirmation", {
                         required: "É necessário confirmar a senha!",
-                            validate: {
-                                matchesPreviousPassword: (value) => {
-                                    const { password } = getValues();
-                                    return password === value || "As senhas devem ser iguais!";
-                                }
+                        validate: {
+                            matchesPreviousPassword: (value) => {
+                                const { password } = getValues();
+                                return password === value || "As senhas devem ser iguais!";
                             }
-                        })
+                        }
+                    })
                     }
                     className='rounded text-primary placeholder:text-primary'
                 />
