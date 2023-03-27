@@ -31,7 +31,7 @@ export default function LogIn() {
     }
 
     return (
-        <main className="flex flex-col h-screen justify-between items-center">
+        <main className="flex flex-col h-screen pb-14 lg:py-0 justify-between items-center">
             <h1 className="font-bold text-3xl mt-20">
                 Entre na sua conta, <br className="md:hidden" />
                 é rápido!

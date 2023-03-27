@@ -23,7 +23,7 @@ export default function SignUp() {
 
     async function signUp(data: FormData) {
         const authFlow = await signIn('credentials', {
-            callbackUrl: '/store',
+            callbackUrl: '/auth/login',
             redirect: false,
             name: data.name,
             email: data.email,
@@ -34,8 +34,8 @@ export default function SignUp() {
     }
 
     return (
-        <main className="flex flex-col h-screen justify-between items-center">
-            <h1 className="font-bold text-3xl mt-14">
+        <main className="flex flex-col h-screen pb-14 lg:py-0 justify-between items-center">
+            <h1 className="font-bold text-3xl mt-14 px-12">
                 Crie a sua conta, é prático!
             </h1>
             {errors && renderErrors(errors)}
