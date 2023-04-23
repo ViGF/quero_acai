@@ -1,13 +1,14 @@
 'use client'
 
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useForm } from 'react-hook-form';
 import { Button } from "@/components/Button";
 import { renderErrors } from "@/utils/functions/renderErrors";
 import { useState } from "react";
-import { ErrorForm } from "@/components/ErrorForm";
-import { useRouter } from "next/navigation";
+import { useSignIn } from "@clerk/nextjs";
+import { useAuth } from '@clerk/nextjs'
+import Loading from "@/app/auth/loading";
+import { useRouter } from 'next/navigation'
 
 type FormData = {
     email: string
@@ -15,33 +16,39 @@ type FormData = {
 }
 
 export default function LogIn() {
-    const [errorAuth, setErrorAuth] = useState<string | undefined>()
+    const [errorAuth, setErrorAuth] = useState<string[]>()
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>()
+    const { signIn, isLoaded } = useSignIn()
     const router = useRouter()
+    const { isSignedIn } = useAuth()
 
-    async function logIn(data: FormData) {
-        const authFlow = await signIn('credentials', {
-            callbackUrl: '/store',
-            redirect: false,
-            email: data.email,
-            password: data.password
-        })
-        setErrorAuth(authFlow?.error)
-        authFlow?.url ? router.push(authFlow?.url) : null
+    if (isSignedIn) {
+        return router.push('/store')
     }
 
-    return (
+    async function onSignInPress(data: FormData) {
+        await signIn?.create({
+            identifier: data.email,
+            strategy: 'password',
+            password: data.password
+        }).then((result) => {
+            router.replace('/store')
+            router.back()
+        }).catch((err) => {
+            setErrorAuth(err.errors)
+        })
+    }
+
+    return isLoaded ? (
         <main className="flex flex-col h-screen pb-14 lg:py-0 justify-between items-center">
             <h1 className="font-bold text-3xl mt-20">
                 Entre na sua conta, <br className="md:hidden" />
                 é rápido!
             </h1>
             {errors && renderErrors(errors)}
-            {errorAuth && (
-                <ErrorForm message={errorAuth} />
-            )}
+            {errorAuth && renderErrors(errorAuth)}
             <form
-                onSubmit={handleSubmit(logIn)}
+                onSubmit={handleSubmit(onSignInPress)}
                 className='flex flex-col font-extralight w-64 caret-primary'
             >
                 <label>Email</label>
@@ -75,5 +82,5 @@ export default function LogIn() {
                 <Link href='/auth/signup' className="underline">Criar agora</Link>
             </p>
         </main>
-    )
+    ) : (<Loading />)
 }

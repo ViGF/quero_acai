@@ -1,13 +1,13 @@
 'use client'
 
-import { signIn } from "next-auth/react";
 import { Button } from "@/components/Button";
 import { renderErrors } from "@/utils/functions/renderErrors";
 import Link from "next/link";
 import { useForm } from 'react-hook-form';
 import { useState } from "react";
-import { ErrorForm } from "@/components/ErrorForm";
 import { useRouter } from "next/navigation";
+import { useAuth, useSignUp } from "@clerk/nextjs";
+import Loading from "../loading";
 
 export type FormData = {
     name: string
@@ -17,33 +17,39 @@ export type FormData = {
 }
 
 export default function SignUp() {
-    const [errorAuth, setErrorAuth] = useState<string | undefined>()
+    const [errorAuth, setErrorAuth] = useState<string[]>()
     const { register, handleSubmit, getValues, formState: { errors } } = useForm<FormData>()
     const router = useRouter()
-
-    async function signUp(data: FormData) {
-        const authFlow = await signIn('credentials', {
-            callbackUrl: '/auth/login',
-            redirect: false,
-            name: data.name,
-            email: data.email,
-            password: data.password
-        })
-        setErrorAuth(authFlow?.error)
-        authFlow?.url ? router.push(authFlow?.url) : null
+    const { signUp, isLoaded } = useSignUp()
+    const { isSignedIn } = useAuth()
+    
+    if(isSignedIn) {
+        return router.push('/store')
     }
 
-    return (
+    async function onSignUpPress(data: FormData) {
+        await signUp?.create({
+            firstName: data.name,
+            emailAddress: data.email,
+            password: data.password
+        }).then(async (result) => {
+            if (result.status === "complete") {
+                router.push('/store')
+            }
+        }).catch((err) => {
+            setErrorAuth(err.errors)
+        })
+    }
+
+    return isLoaded ? (
         <main className="flex flex-col h-screen pb-14 lg:py-0 justify-between items-center">
             <h1 className="font-bold text-3xl mt-14 px-12">
                 Crie a sua conta, é prático!
             </h1>
             {errors && renderErrors(errors)}
-            {errorAuth && (
-                <ErrorForm message={errorAuth} />
-            )}
+            {errorAuth && renderErrors(errorAuth)}
             <form
-                onSubmit={handleSubmit(signUp)}
+                onSubmit={handleSubmit(onSignUpPress)}
                 className='flex flex-col font-extralight w-64 caret-primary'
             >
                 <label>Nome</label>
@@ -105,5 +111,5 @@ export default function SignUp() {
                 </Link>
             </p>
         </main>
-    )
+    ) : (<Loading />)
 }

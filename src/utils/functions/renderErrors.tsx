@@ -6,12 +6,16 @@ type FormErrorIndexes = {
     [index: string]: any
 }
 
-export function renderErrors(errors: FieldErrors<FormData>) {
+export function renderErrors(errors: FieldErrors<FormData> | string[]) {
     for (const error in errors) {
         const errorsTypedWithIndexes: FormErrorIndexes = errors
 
         return (
-            <ErrorForm message={errorsTypedWithIndexes[error].message} />
+            <ErrorForm
+                message={
+                    errorsTypedWithIndexes[error].message
+                }
+            />
         )
     }
 }

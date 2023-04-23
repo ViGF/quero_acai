@@ -1,3 +1,5 @@
+import { ClerkProvider } from "@clerk/nextjs/app-beta"
+import { ptBR } from '@clerk/localizations'
 import { Poppins } from '@next/font/google'
 
 import './globals.css'
@@ -19,9 +21,14 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
             <head />
-            <body className={`${poppins.className}`}>
-                {children}
-            </body>
+            <ClerkProvider
+                localization={ptBR}
+                publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+            >
+                <body className={`${poppins.className}`}>
+                    {children}
+                </body>
+            </ClerkProvider>
         </html>
     )
 }
