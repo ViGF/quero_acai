@@ -1,14 +1,14 @@
-'use client'
+"use client"
 
-import Link from "next/link";
-import { useForm } from 'react-hook-form';
-import { Button } from "@/components/Button";
-import { renderErrors } from "@/utils/functions/renderErrors";
+import React from "react";
 import { useState } from "react";
-import { useSignIn } from "@clerk/nextjs";
-import { useAuth } from '@clerk/nextjs'
-import Loading from "@/app/auth/loading";
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation'
+import Link from "next/link";
+import { useAuth, useSignIn } from '@clerk/nextjs'
+import { Button } from "../../../components/Button";
+import Loading from "../loading";
+import { renderErrors } from "../../../utils/functions/renderErrors";
 
 type FormData = {
     email: string
@@ -23,7 +23,7 @@ export default function LogIn() {
     const { isSignedIn } = useAuth()
 
     if (isSignedIn) {
-        return router.push('/store')
+        router.push('/store')
     }
 
     async function onSignInPress(data: FormData) {
@@ -33,54 +33,57 @@ export default function LogIn() {
             password: data.password
         }).then((result) => {
             router.replace('/store')
-            router.back()
+            router.forward()
         }).catch((err) => {
             setErrorAuth(err.errors)
         })
     }
 
-    return isLoaded ? (
-        <main className="flex flex-col h-screen pb-14 lg:py-0 justify-between items-center">
-            <h1 className="font-bold text-3xl mt-20">
-                Entre na sua conta, <br className="md:hidden" />
-                é rápido!
-            </h1>
-            {errors && renderErrors(errors)}
-            {errorAuth && renderErrors(errorAuth)}
-            <form
-                onSubmit={handleSubmit(onSignInPress)}
-                className='flex flex-col font-extralight w-64 caret-primary'
-            >
-                <label>Email</label>
-                <input
-                    type="email"
-                    placeholder="ex.: junior@email.com"
-                    {
-                    ...register('email',
-                        { required: "Um email é obrigatório!" }
-                    )
-                    }
-                    className='rounded text-primary placeholder:text-primary'
-                />
-                <label className="mt-3">Senha</label>
-                <input
-                    type="password"
-                    placeholder="********"
-                    {
-                    ...register('password',
-                        { required: "Uma senha é obrigatória!" }
-                    )
-                    }
-                    className='rounded text-primary placeholder:text-primary'
-                />
-                <Button type='submit' className="font-normal mt-20">
-                    Entrar
-                </Button>
-            </form>
-            <p className="mb-5">
-                Não tenho conta.{' '}
-                <Link href='/auth/signup' className="underline">Criar agora</Link>
-            </p>
-        </main>
-    ) : (<Loading />)
+    return (
+        <>
+            {!isLoaded && <Loading />}
+            <main className="flex flex-col h-screen pb-14 lg:py-0 justify-between items-center">
+                <h1 className="font-bold text-3xl mt-20">
+                    Entre na sua conta, <br className="md:hidden" />
+                    é rápido!
+                </h1>
+                {errors && renderErrors(errors)}
+                {errorAuth && renderErrors(errorAuth)}
+                <form
+                    onSubmit={handleSubmit(onSignInPress)}
+                    className='flex flex-col font-extralight w-64 caret-primary'
+                >
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        placeholder="ex.: junior@email.com"
+                        {
+                        ...register('email',
+                            { required: "Um email é obrigatório!" }
+                        )
+                        }
+                        className='rounded text-primary placeholder:text-primary'
+                    />
+                    <label className="mt-3">Senha</label>
+                    <input
+                        type="password"
+                        placeholder="********"
+                        {
+                        ...register('password',
+                            { required: "Uma senha é obrigatória!" }
+                        )
+                        }
+                        className='rounded text-primary placeholder:text-primary'
+                    />
+                    <Button type='submit' className="font-normal mt-20">
+                        Entrar
+                    </Button>
+                </form>
+                <p className="mb-5">
+                    Não tenho conta.{' '}
+                    <Link href='/auth/signup' className="underline">Criar agora</Link>
+                </p>
+            </main>
+        </>
+    )
 }
