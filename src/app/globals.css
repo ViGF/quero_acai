@@ -24,3 +24,7 @@ body {
 .cl-profileSectionTitle {
   @apply border-white;
 }
+
+.cl-navbar {
+  @apply bg-secondary border-0;
+}
