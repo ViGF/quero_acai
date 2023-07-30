@@ -25,7 +25,7 @@ model Order {
   fruits          String[]
   syrupsAndCreams String[]
   quantity        Int      @default(1)
-  priceId         String   @default("price_1NVwlmJT0aY1nC8ZqJsWYa3i")
-
+  priceId         String
+  
   @@index([cartId])
 }

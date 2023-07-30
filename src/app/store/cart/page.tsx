@@ -21,12 +21,14 @@ export default function Cart() {
   }
 
   function updateQuantityOnLocalData(orderId: string, quantity: number) {
-    const orders = items.filter(item => item.id !== orderId )
+    const orderToUpdateIndex = items.findIndex(item => item.id == orderId)!
     const orderToUpdate = items.find(item => item.id == orderId)!
 
     const orderUpdated: OrderProps = { ...orderToUpdate, quantity }
+    const orders = items
+    orders[orderToUpdateIndex] = orderToUpdate
 
-    setItems([...orders, orderUpdated])
+    setItems(orders)
   }
 
   async function checkout() {
@@ -85,8 +87,7 @@ export default function Cart() {
             <div className="flex flex-wrap gap-4">
               {items.map((item, i) => {
                 const priceObject = prices.find((value) => {
-                  value.id == items[0].priceId;
-                  return value;
+                  return value.id == item.priceId;
                 });
 
                 if (priceObject) {

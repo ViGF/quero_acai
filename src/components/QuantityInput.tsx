@@ -64,10 +64,11 @@ export function QuantityInput({ defaultValue, orderId, userId, removeItemFromLoc
   }
 
   return (
-    <Select.Root onValueChange={value => saveQuantity(+value)} value={defaultValue.toString()}>
+    <Select.Root onValueChange={value => saveQuantity(+value)}>
       <Select.Trigger className="my-1 flex items-center justify-center gap-1 px-1">
         <Select.Value
           placeholder={defaultValue}
+          defaultValue={defaultValue}
           aria-label="Quantidade"
         />
         <Select.Icon>

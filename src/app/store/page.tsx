@@ -18,6 +18,7 @@ export default function Store() {
     handleSubmit,
     setValue,
     control,
+    watch,
     formState: { errors },
   } = useForm<OrderProps>();
 

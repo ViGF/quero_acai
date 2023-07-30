@@ -62,7 +62,7 @@ export async function POST(req: Request) {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      success_url: 'https://quero-acai-vigf.vercel.app/store/sucess',
+      success_url: 'https://quero-acai-vigf.vercel.app/store/success?session_id={CHECKOUT_SESSION_ID}',
       cancel_url: 'https://quero-acai-vigf.vercel.app/store/cart',
       line_items: itemsInStripeObject,
       phone_number_collection: {

@@ -3,13 +3,13 @@ import Image from "next/image";
 import Stripe from "stripe";
 
 import { Button } from "@/components/Button";
-import { CaretDoubleDown } from "@/icons";
 import { InfoHeader } from "@/components/InfoHeader";
 import { InfoItem } from "@/components/InfoItem";
 import { CardSize } from "@/components/CardSize";
 import { MainContainer as Container } from "@/components/MainContainer";
 
 import Logo from "../../public/Logo.png";
+import { ChevronsDown } from "lucide-react";
 
 async function getStripeProps() {
   const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY ?? "", {
@@ -64,7 +64,7 @@ export default async function Home() {
           </p>
         </div>
         <footer className="absolute bottom-9 flex flex-col items-center justify-center">
-          <CaretDoubleDown />
+          <ChevronsDown />
           <span className="mt-1 font-light italic text-white">
             Explorar Opções
           </span>
