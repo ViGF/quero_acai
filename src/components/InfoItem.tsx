@@ -1,13 +1,14 @@
-type InfoItemProps = {
-    text: string
-}
+import { twMerge } from "tailwind-merge";
 
-export function InfoItem({ text }: InfoItemProps) {
-    return (
-        <div className="rounded-md bg-white py-1 px-6 m-auto">
-            <h4 className="text-center text-primary font-light w-48">
-                {text}
-            </h4>
-        </div>
-    )
+type InfoItemProps = {
+  text: string;
+  className?: string;
+};
+
+export function InfoItem({ text, className }: InfoItemProps) {
+  return (
+    <div className={twMerge("m-auto rounded-md bg-white py-1 px-6 w-60 text-center font-light text-primary", className)}>
+      {text}
+    </div>
+  );
 }

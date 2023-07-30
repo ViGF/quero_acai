@@ -1,13 +1,16 @@
-import { ReactNode } from "react"
+import { HTMLAttributes, ReactNode } from "react";
+import { twMerge } from "tailwind-merge";
 
-type ButtonProps = {
-    children: ReactNode
-}
+interface ButtonProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+};
 
-export function MainContainer({ children }: ButtonProps) {
-    return (
-        <div className="lg:shadow-2xl hover:transform lg:hover:scale-110 hover:shadow-neutral-800 rounded-xl max-w-sm px-16 transition-all min-h-full flex flex-col lg:justify-between">
-            {children}
-        </div>
-    )
+export function MainContainer({ children, className }: ButtonProps) {
+  return (
+    <div className={
+      twMerge("flex min-h-full max-w-sm flex-col rounded-xl md:px-16 transition-all hover:transform hover:shadow-neutral-800 lg:justify-between lg:shadow-2xl lg:hover:scale-110 -mt-3", className)
+    }>
+      {children}
+    </div>
+  );
 }

@@ -1,34 +1,35 @@
-import { ClerkProvider } from "@clerk/nextjs/app-beta"
-import { ptBR } from '@clerk/localizations'
-import { Poppins } from '@next/font/google'
+import { Poppins } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs/app-beta";
+import { ptBR } from "@clerk/localizations";
 
-import './globals.css'
+import "./globals.css";
 
 const poppins = Poppins({
-    weight: ['200', '300', '400', '500', '700'],
-    style: ['italic', 'normal']
-})
+  weight: ["200", "300", "400", "500", "700"],
+  style: ["italic", "normal"],
+  subsets: ['latin']
+});
+
+export const metadata = {
+  title: "Quero Açaí",
+  description: "Quero Açaí, peça seu açaí online e personalizado, é prático",
+};
 
 export default function RootLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode;
 }) {
-    return (
-        <html lang="pt-br">
-            {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
-            <head />
-            <ClerkProvider
-                localization={ptBR}
-                publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-            >
-                <body className={`${poppins.className}`}>
-                    {children}
-                </body>
-            </ClerkProvider>
-        </html>
-    )
+  return (
+    <html lang="pt-br">
+      <body className={`${poppins.className}`}>
+        <ClerkProvider
+          localization={ptBR}
+          publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+        >
+          {children}
+        </ClerkProvider>
+      </body>
+    </html>
+  );
 }

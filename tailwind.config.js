@@ -20,6 +20,9 @@ module.exports = {
             padding: {
                 '14px': '0.875rem',
                 '6px': '0.375rem'
+            },
+            backgroundImage: {
+              'image-none': 'none'
             }
         },
     },
